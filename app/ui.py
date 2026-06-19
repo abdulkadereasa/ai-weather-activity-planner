@@ -133,18 +133,16 @@ h1, h2, h3 {
 }
 
 .brand-mark {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.32);
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.28);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
-    letter-spacing: 0;
-    color: white;
-    flex: 0 0 52px;
+    flex: 0 0 58px;
+    padding: 6px;
 }
 
 .brand-title {
@@ -1110,7 +1108,23 @@ def render_brand_header(
         f"""
         <div class="brand-header">
             <div class="brand-row">
-                <div class="brand-mark">WA</div>
+                <div class="brand-mark">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="36" height="36">
+                        <circle cx="21" cy="19" r="7" fill="#fbbf24"/>
+                        <line x1="21" y1="7" x2="21" y2="10" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="21" y1="28" x2="21" y2="31" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="9" y1="19" x2="12" y2="19" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="30" y1="19" x2="33" y2="19" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="12.9" y1="10.9" x2="15" y2="13" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="27" y1="25" x2="29.1" y2="27.1" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="29.1" y1="10.9" x2="27" y2="13" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="15" y1="25" x2="12.9" y2="27.1" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                        <ellipse cx="28" cy="33" rx="10" ry="6" fill="white" opacity="0.9"/>
+                        <ellipse cx="20" cy="34" rx="6" ry="5" fill="white" opacity="0.9"/>
+                        <ellipse cx="33" cy="34.5" rx="6" ry="5" fill="white" opacity="0.9"/>
+                        <ellipse cx="26" cy="30" rx="7" ry="6" fill="white" opacity="0.9"/>
+                    </svg>
+                </div>
                 <div>
                     <div class="brand-title">Weather-Based Activity Planner</div>
                     <div class="brand-subtitle">Weather-aware activity ideas tailored to your destination and preferences.</div>
