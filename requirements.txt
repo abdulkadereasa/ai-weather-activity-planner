@@ -1,0 +1,7 @@
+streamlit
+requests
+python-dotenv
+geonamescache
+plotly
+pydeck
+google-genai
