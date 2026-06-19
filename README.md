@@ -1,7 +1,7 @@
 ---
 title: AI Weather Activity Planner
 colorFrom: blue
-colorTo: teal
+colorTo: green
 sdk: streamlit
 sdk_version: 1.58.0
 app_file: app/ui.py
