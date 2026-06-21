@@ -1410,7 +1410,7 @@ def render_welcome(ready, city=None, country=None):
                     <div class="feature-title">AI Agent Loop</div>
                     <div class="feature-desc">
                         An autonomous agent generates, scores, and revises activity
-                        suggestions using GPT-4o-mini with a built-in quality evaluator.
+                        suggestions using Google Gemini 2.5 Flash with a built-in quality evaluator.
                     </div>
                 </div>
                 <div class="feature-card feature-card-cyan">
