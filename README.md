@@ -10,75 +10,69 @@ pinned: false
 
 # AI-Based Weather Activity Planner
 
-**SEN4018 — Data Science with Python | Bahcesehir University**
+**SEN4018 Semester Project — Bahcesehir University**
 **Team:** Abdulkader Al-Easa & Maeen Alganimi
 
-An end-to-end agentic AI system that analyzes real-time weather forecasts and autonomously recommends suitable activities with real venue suggestions and an interactive map.
-
-**Live App:** https://huggingface.co/spaces/abdulkadereasa/ai-weather-activity-planner
-
----
-
-## Project Overview
-
-Users struggle with weather-dependent planning. Standard weather apps show raw data but leave the user to interpret it. This system bridges that gap — it autonomously analyzes conditions, generates ranked activity recommendations, evaluates their quality, and suggests real nearby venues, all in one pipeline.
+**Live app:** https://huggingface.co/spaces/abdulkadereasa/ai-weather-activity-planner
+**Blog post:** https://medium.com/@abdulkader.aleasa19/project-upload-1-system-definition-motivation-8f2445306b76
 
 ---
 
-## Features
+## What it does
 
-- **Live weather data** — fetches current conditions and up to 5-day forecasts via OpenWeather API
-- **Planning period selector** — Today, Next 3 days, or Next 5 days; forecast and recommendations adapt accordingly
-- **Autonomous agent loop** — generates, filters, scores, and revises activity suggestions without user input
-- **AI quality evaluation** — a second LLM call independently scores the output and triggers a revision if needed
-- **Day-by-day breakdown** — visual weather cards per day with best outdoor day detection
-- **Real venue suggestions** — finds actual nearby venues from OpenStreetMap (name + address)
-- **Interactive map** — pydeck map with city centre and venue pins, click for details
-- **Preference filtering** — respects user interests and exclusions throughout the pipeline
-- **API warning banner** — clearly notifies when AI quota is reached and fallback is used
+Every weather app can tell you it is 28°C with 15% rain. Almost none tell you what to do with that information. This system closes that gap — it reads a live weather forecast, reasons about risk and comfort, and returns a ranked set of personalized activities, each tied to a real nearby venue and plotted on an interactive map.
 
 ---
 
-## Architecture
+## How the system thinks
+
+The application is built as four cooperating layers that run autonomously after the user clicks Generate.
+
+**1. Weather layer**
+Fetches live data from OpenWeatherMap and reshapes it into a decision context — per-day comfort scores, risk flags (precipitation, wind, extreme temperature, storm), and best-day detection across the forecast window.
+
+**2. Agent decision layer**
+The autonomous loop in `activity_agent.py`:
+- Assigns a planning priority from weather risk flags
+- Calls Gemini 2.5 Flash to generate 10 candidate activities as structured JSON
+- Filters by safety, score, and user dislikes
+- Loops with self-feedback if fewer than 6 quality activities survive
+- Falls back to rule-based suggestions if the LLM is unavailable
+
+**3. Evaluation layer**
+A second independent agent (`evaluator_agent.py`) scores the output 1–10, returns a pass / needs-improvement verdict, and lists strengths and weaknesses. If actionable weaknesses are found, the system regenerates and only accepts the revision if quality improved. A "Revised" badge appears in the UI when self-correction fires.
+
+**4. Venue layer**
+After the plan is finalized, the venue service queries OpenStreetMap:
+- **Nominatim** — geocodes the city to coordinates
+- **Overpass** — finds real places within 8 km (museums, restaurants, beaches, landmarks, etc.)
+
+Every activity card shows a venue name and address. All venues are plotted on a pydeck interactive map.
+
+---
+
+## Agent loop at a glance
 
 ```
-User Input (city, period, preferences)
-        |
-        v
-Weather Service (OpenWeather API)
-        |
-        v
-Activity Agent (Gemini 2.5 Flash)
-  - Analyze weather conditions
-  - Generate 10 candidate activities
-  - Filter unsafe / disliked activities
-  - Loop if not enough quality results
-        |
-        v
-LLM Summary Agent (Gemini 2.5 Flash)
-        |
-        v
-Evaluator Agent (Gemini 2.5 Flash)
-  - Score output 1-10
-  - Identify strengths / weaknesses
-  - Trigger revision loop if needed
-        |
-        v
-Venue Service (OpenStreetMap - Nominatim + Overpass)
-        |
-        v
-Streamlit UI (tabbed: Activities & Map / Weather / Analysis)
+Assess weather risk → set priority
+→ Generate activities (Gemini 2.5 Flash)
+→ Filter by safety and preferences
+→ Loop if set is too thin
+→ Evaluate with second LLM call
+→ Revise if weaknesses found (accept only if quality improved)
+→ Find venues from OpenStreetMap
+→ Present final plan
 ```
 
 ---
 
-## Tech Stack
+## Tech stack
 
 | Component | Technology |
 |---|---|
 | Web interface | Streamlit |
 | AI model | Google Gemini 2.5 Flash |
-| Weather data | OpenWeather API |
+| Weather data | OpenWeatherMap API |
 | Venue data | OpenStreetMap (Nominatim + Overpass) |
 | Location lists | geonamescache |
 | Map rendering | pydeck with Carto tiles |
@@ -87,15 +81,15 @@ Streamlit UI (tabbed: Activities & Map / Weather / Analysis)
 
 ---
 
-## Project Requirements Covered
+## Syllabus requirements covered
 
-- **Autonomous decision loop** — the agent decides priority, filters activities, loops for quality, and accepts/rejects revisions
-- **Tool usage** — OpenWeather API (weather), OpenStreetMap APIs (venues), Gemini API (AI)
-- **Evaluation framework** — LLM-in-the-loop evaluator scores and revises the primary agent's output
+- **Autonomous decision loop** — agent sets priority, filters, loops, evaluates, and revises without user input
+- **Tool usage** — OpenWeather API, OpenStreetMap APIs, Google Gemini API
+- **Evaluation framework** — LLM-in-the-loop evaluator scores and triggers revision of the primary agent's output
 
 ---
 
-## How to Run Locally
+## How to run locally
 
 ```bash
 pip install -r requirements.txt
@@ -110,7 +104,10 @@ GEMINI_API_KEY=your_key_here
 
 ---
 
-## Team Responsibilities
+## Team
 
-- **Abdulkader Al-Easa** — backend AI architecture, agent loop, API integration, venue service, deployment
-- **Maeen Alganimi** — UI design, data presentation, testing
+**Abdulkader Al-Easa** — agent pipeline, weather service, risk analysis, prompt design, venue service, activity cards, pydeck map, planning-period flow, deployment
+
+**Maeen Alganimi** — evaluator agent, self-revision loop, per-day comfort scoring, best-day selection, fallback behavior, venue service, tabbed layout, day-by-day forecast cards, evaluation panel, CSS theming, testing
+
+Both members worked across the full stack and understand every layer of the system end to end.
