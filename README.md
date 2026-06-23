@@ -106,8 +106,8 @@ GEMINI_API_KEY=your_key_here
 
 ## Team
 
-**Abdulkader Al-Easa** — agent pipeline, weather service, risk analysis, prompt design, venue service, activity cards, pydeck map, planning-period flow, deployment
+Both members worked across the full stack — agent logic, data services, and UI — and understand every layer of the system end to end.
 
-**Maeen Alganimi** — evaluator agent, self-revision loop, per-day comfort scoring, best-day selection, fallback behavior, venue service, tabbed layout, day-by-day forecast cards, evaluation panel, CSS theming, testing
+**Abdulkader Al-Easa** — agent pipeline and autonomous decision loop, weather service and risk analysis, prompt engineering, OpenStreetMap venue service, pydeck interactive map, planning-period flow, deployment pipeline to HuggingFace
 
-Both members worked across the full stack and understand every layer of the system end to end.
+**Maeen Alganimi** — evaluator agent and self-revision loop, per-day comfort scoring and best-day detection, fallback behavior, tabbed UI layout, day-by-day forecast cards, CSS theming, cross-country testing
